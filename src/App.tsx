@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { CodeBlock } from './components/CodeBlock';
 import { FileTree } from './components/FileTree';
 import { botFiles } from './data/botFiles';
@@ -24,7 +24,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('overview');
   const [selectedFile, setSelectedFile] = useState(0);
 
-  const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
+  const tabs: { id: Tab; label: string; icon: ReactNode }[] = [
     { id: 'overview', label: 'Overview', icon: <Info size={16} /> },
     { id: 'setup', label: 'Setup', icon: <Terminal size={16} /> },
     { id: 'files', label: 'Source Code', icon: <FileCode size={16} /> },
@@ -210,7 +210,7 @@ npm run dev`}
   );
 }
 
-function FeatureCard({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) {
+function FeatureCard({ icon, title, description }: { icon: ReactNode; title: string; description: string }) {
   return (
     <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5 card-glow">
       <div className="mb-3">{icon}</div>
@@ -347,7 +347,7 @@ pm2 startup
   );
 }
 
-function SetupStep({ number, title, children }: { number: number; title: string; children: React.ReactNode }) {
+function SetupStep({ number, title, children }: { number: number; title: string; children: ReactNode }) {
   return (
     <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-6">
       <div className="flex items-center gap-3 mb-4">
