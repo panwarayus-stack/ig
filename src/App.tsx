@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react';
 import { CodeBlock } from './components/CodeBlock';
 import { FileTree } from './components/FileTree';
+import { DeployWizard } from './components/DeployWizard';
 import { botFiles } from './data/botFiles';
 import {
   Terminal,
@@ -16,9 +17,10 @@ import {
   MessageSquare,
   HelpCircle,
   Info,
+  Rocket,
 } from 'lucide-react';
 
-type Tab = 'overview' | 'setup' | 'files' | 'commands' | 'architecture';
+type Tab = 'overview' | 'setup' | 'files' | 'commands' | 'architecture' | 'deploy';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('overview');
@@ -30,6 +32,7 @@ export default function App() {
     { id: 'files', label: 'Source Code', icon: <FileCode size={16} /> },
     { id: 'commands', label: 'Commands', icon: <MessageSquare size={16} /> },
     { id: 'architecture', label: 'Architecture', icon: <Shield size={16} /> },
+    { id: 'deploy', label: 'Deploy', icon: <Rocket size={16} /> },
   ];
 
   return (
@@ -90,6 +93,7 @@ export default function App() {
         )}
         {activeTab === 'commands' && <CommandsTab />}
         {activeTab === 'architecture' && <ArchitectureTab />}
+        {activeTab === 'deploy' && <DeployTab />}
       </main>
 
       {/* Footer */}
@@ -712,6 +716,106 @@ npm run test:watch
 # - Edge cases (empty input, unknown commands)`}
           />
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Deploy Tab ──────────────────────────────────────────────────────────────
+
+function DeployTab() {
+  return (
+    <div className="space-y-8">
+      <div>
+        <h2 className="text-2xl font-bold text-white mb-2">Deploy Your Bot</h2>
+        <p className="text-gray-400">
+          Configure and deploy your IG Bot to Render.com with this step-by-step wizard.
+          All configuration is handled through the website — no manual environment setup required.
+        </p>
+      </div>
+
+      <DeployWizard />
+
+      {/* Quick Deploy Info */}
+      <div className="grid md:grid-cols-2 gap-4">
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
+            <CheckCircle2 size={18} className="text-green-400" />
+            What You'll Get
+          </h3>
+          <ul className="space-y-2 text-sm text-gray-300">
+            <li className="flex items-start gap-2">
+              <ChevronRight size={14} className="text-green-400 mt-0.5 shrink-0" />
+              <span>Pre-configured .env file with your credentials</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <ChevronRight size={14} className="text-green-400 mt-0.5 shrink-0" />
+              <span>render.yaml for one-click Render.com deployment</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <ChevronRight size={14} className="text-green-400 mt-0.5 shrink-0" />
+              <span>Auto-generated SESSION_SECRET for security</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <ChevronRight size={14} className="text-green-400 mt-0.5 shrink-0" />
+              <span>Step-by-step deployment instructions</span>
+            </li>
+          </ul>
+        </div>
+
+        <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5">
+          <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
+            <Shield size={18} className="text-purple-400" />
+            Security Notes
+          </h3>
+          <ul className="space-y-2 text-sm text-gray-300">
+            <li className="flex items-start gap-2">
+              <ChevronRight size={14} className="text-purple-400 mt-0.5 shrink-0" />
+              <span>Your credentials are stored only in your browser</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <ChevronRight size={14} className="text-purple-400 mt-0.5 shrink-0" />
+              <span>Never commit .env to public repositories</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <ChevronRight size={14} className="text-purple-400 mt-0.5 shrink-0" />
+              <span>Use Render's environment variables for production</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <ChevronRight size={14} className="text-purple-400 mt-0.5 shrink-0" />
+              <span>Session files are automatically encrypted</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Alternative Deployment */}
+      <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-6">
+        <h3 className="text-lg font-semibold text-white mb-4">Alternative: Manual Deployment</h3>
+        <p className="text-sm text-gray-400 mb-4">
+          If you prefer to deploy manually or use a different platform, follow these steps:
+        </p>
+        <CodeBlock
+          language="bash"
+          code={`# 1. Clone your repository
+git clone https://github.com/your-username/igbot.git
+cd igbot
+
+# 2. Install dependencies
+npm install
+
+# 3. Create .env file (use the wizard above to generate)
+nano .env
+
+# 4. Start the bot
+npm start
+
+# For production, use pm2:
+npm install -g pm2
+pm2 start src/index.js --name ig-bot
+pm2 save
+pm2 startup`}
+        />
       </div>
     </div>
   );
